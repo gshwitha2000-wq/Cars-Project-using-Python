@@ -1,42 +1,45 @@
-# COVID-19 Data Analysis
+# 🚗 Cars Data Analysis
 
 ## 📌 Project Overview
 
-This project performs an **Exploratory Data Analysis (EDA)** on COVID-19 data to analyze the spread and impact of the pandemic across different regions.
+This project performs a basic **Exploratory Data Analysis (EDA)** on a cars dataset using Python.
 
-Using **Python, Pandas, NumPy, and Matplotlib**, the project explores confirmed cases, deaths, and recovered cases and identifies the regions with the highest and lowest numbers of reported cases.
+The analysis focuses on understanding the structure of the dataset, examining car manufacturers, identifying heavy vehicles, and comparing the **minimum and maximum Manufacturer's Suggested Retail Price (MSRP)** across different regions of origin.
+
+The project uses **Pandas, NumPy, and Matplotlib** for data loading, exploration, filtering, and analysis.
 
 ## 🎯 Objectives
 
 The main objectives of this project are:
 
-* Analyze COVID-19 data across different regions.
-* Check the dataset for missing values and duplicate records.
-* Calculate total confirmed cases by region.
-* Calculate total deaths by region.
-* Calculate total recovered cases by region.
-* Identify regions with the highest number of confirmed cases.
-* Identify regions with the lowest number of confirmed cases.
-* Identify regions with the highest number of deaths.
-* Analyze COVID-19 data specifically for India and Brazil.
-* Sort regions based on confirmed and recovered cases.
+* Load and explore the cars dataset.
+* Understand the columns and data types.
+* Generate descriptive statistics.
+* Check for duplicate records.
+* Identify different car manufacturers.
+* Count the number of cars for each manufacturer.
+* Find cars weighing more than 4,000 units.
+* Find the costliest car in each region.
+* Find the cheapest car in each region.
 
 ## 📂 Dataset
 
-The project uses the **COVID-19 dataset** stored in:
+The project uses the following dataset:
 
 ```text
-4. Covid_19_data.csv
+2. Cars Data1.csv
 ```
 
-The analysis uses the following important columns:
+The dataset contains information about different cars, including their manufacturer, origin, weight, and MSRP.
 
-| Column      | Description                                       |
-| ----------- | ------------------------------------------------- |
-| `Region`    | Region/country where COVID-19 cases were reported |
-| `Confirmed` | Number of confirmed COVID-19 cases                |
-| `Deaths`    | Number of reported deaths                         |
-| `Recovered` | Number of recovered cases                         |
+### Important Columns Used
+
+| Column   | Description                           |
+| -------- | ------------------------------------- |
+| `Make`   | Car manufacturer/brand                |
+| `Origin` | Region or country of origin           |
+| `Weight` | Weight of the car                     |
+| `MSRP`   | Manufacturer's Suggested Retail Price |
 
 ## 🛠️ Technologies Used
 
@@ -46,164 +49,162 @@ The analysis uses the following important columns:
 * **Matplotlib**
 * **Jupyter Notebook**
 
-## 🔍 Data Analysis Performed
+## 🔍 Analysis Performed
 
-### 1. Data Loading
+### 1. Importing the Dataset
 
-The dataset is loaded using Pandas:
+The CSV dataset is loaded using Pandas:
 
 ```python
-data = pd.read_csv("4. Covid_19_data.csv")
+data = pd.read_csv("2. Cars Data1.csv")
 ```
 
-The complete dataset is then displayed and explored.
+The complete dataset is then displayed for initial inspection.
 
-### 2. Dataset Columns
+### 2. Checking Dataset Columns
 
-The project checks the available columns using:
+The project examines the available columns using:
 
 ```python
 data.columns
 ```
 
-This helps understand the structure of the dataset before performing analysis.
+This helps understand the structure and attributes available in the dataset.
 
-### 3. Missing Value Analysis
+### 3. Dataset Information
 
-Missing values are checked using:
+The `info()` function is used to inspect:
+
+* Number of records
+* Number of columns
+* Data types
+* Non-null values
 
 ```python
-data.isnull().sum()
+data.info()
 ```
 
-This helps determine whether the dataset contains incomplete records.
+### 4. Descriptive Statistics
 
-### 4. Duplicate Analysis
+The project uses:
 
-Duplicate records are identified using:
+```python
+data.describe()
+```
+
+to generate descriptive statistics for the numerical columns.
+
+This provides information such as:
+
+* Count
+* Mean
+* Standard deviation
+* Minimum
+* Maximum
+* Quartiles
+
+### 5. Duplicate Records
+
+Duplicate records are checked using:
 
 ```python
 data.duplicated().sum()
 ```
 
-This helps assess the quality and uniqueness of the dataset.
+This helps identify whether duplicate rows exist in the dataset.
 
-### 5. Confirmed Cases by Region
+### 6. Different Car Manufacturers
 
-The total number of confirmed COVID-19 cases is calculated for each region:
-
-```python
-data.groupby('Region')['Confirmed'].sum()
-```
-
-This provides a region-wise view of the spread of COVID-19.
-
-### 6. Deaths by Region
-
-The total number of deaths is calculated for each region:
+The project identifies all unique car manufacturers using:
 
 ```python
-data.groupby('Region')['Deaths'].sum()
+data.Make.unique()
 ```
 
-### 7. Recovered Cases by Region
+This provides an overview of the different brands represented in the dataset.
 
-The total number of recovered cases is calculated using:
+### 7. Number of Cars by Manufacturer
+
+The number of cars belonging to each manufacturer is calculated using:
 
 ```python
-data.groupby('Region')['Recovered'].sum()
+data.Make.value_counts()
 ```
 
-### 8. Regions with Fewer Than 10 Confirmed Cases
+This helps determine which manufacturers have the highest representation in the dataset.
 
-The project filters the dataset to identify records where confirmed cases are below 10:
+### 8. Cars Weighing More Than 4,000
+
+The project filters the dataset to find cars with a weight greater than 4,000:
 
 ```python
-data[data.Confirmed < 10]
+data[data['Weight'] > 4000]
 ```
 
-### 9. Top 5 Regions by Confirmed Cases
+This allows heavy vehicles in the dataset to be identified.
 
-The five regions with the highest number of confirmed cases are identified using:
+### 9. Costliest Car in Each Region
+
+The maximum MSRP for each region of origin is calculated using:
 
 ```python
-data.groupby('Region')['Confirmed'].sum() \
-    .sort_values(ascending=False).head(5)
+data.groupby('Origin')['MSRP'].max()
 ```
 
-### 10. Bottom 5 Regions by Confirmed Cases
+This identifies the highest-priced car available in each region represented in the dataset.
 
-The five regions with the lowest number of confirmed cases are identified using:
+### 10. Cheapest Car in Each Region
+
+The minimum MSRP for each region is calculated using:
 
 ```python
-data.groupby('Region')['Confirmed'].sum() \
-    .sort_values(ascending=True).head(5)
+data.groupby('Origin')['MSRP'].min()
 ```
 
-### 11. Top 10 Regions by Deaths
-
-The project identifies the ten regions with the highest total number of deaths:
-
-```python
-data.groupby('Region')['Deaths'].sum() \
-    .sort_values(ascending=False).head(10)
-```
-
-### 12. India Analysis
-
-COVID-19 records for **India** are filtered separately:
-
-```python
-data[data.Region == 'India']
-```
-
-This allows the COVID-19 data for India to be examined independently.
-
-### 13. Brazil Analysis
-
-Similarly, records for **Brazil** are extracted:
-
-```python
-data[data.Region == 'Brazil']
-```
-
-### 14. Sorting by Confirmed Cases
-
-The dataset is sorted in descending order based on confirmed cases:
-
-```python
-data.sort_values(by=['Confirmed'], ascending=False)
-```
-
-This makes it easier to identify records with the highest number of confirmed cases.
-
-### 15. Sorting by Recovered Cases
-
-The dataset is also sorted based on recovered cases:
-
-```python
-data.sort_values(by=['Recovered'], ascending=True)
-```
+This provides the lowest car price for each region.
 
 ## 📊 Key Analysis Areas
 
-The project focuses on three major COVID-19 indicators:
+The project explores the following areas:
 
-**Confirmed Cases →** Measures the reported spread of COVID-19.
+**Manufacturer Analysis**
+Identifies different car brands and the number of cars associated with each manufacturer.
 
-**Deaths →** Helps understand the impact of COVID-19 across regions.
+**Weight Analysis**
+Filters vehicles based on their weight to identify cars weighing more than 4,000.
 
-**Recovered Cases →** Provides an overview of reported recoveries.
+**Regional Price Analysis**
+Uses `groupby()` to compare the highest and lowest MSRP across different regions.
 
-The region-wise grouping and sorting operations make it possible to compare these indicators across different regions.
+**Data Quality Analysis**
+Uses dataset information, descriptive statistics, and duplicate checks to understand the quality and structure of the data.
+
+## 💡 Skills Demonstrated
+
+This project demonstrates practical knowledge of:
+
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Data Loading
+* Data Inspection
+* Descriptive Statistics
+* Duplicate Detection
+* Unique Value Analysis
+* Value Counts
+* Data Filtering
+* GroupBy Operations
+* Aggregation
+* Exploratory Data Analysis
 
 ## 📁 Project Structure
 
 ```text
-COVID-19-Data-Analysis/
+Cars-Data-Analysis/
 │
-├── Covid19 Project.ipynb
-├── 4. Covid_19_data.csv
+├── Cars Data Project.ipynb
+├── 2. Cars Data1.csv
 └── README.md
 ```
 
@@ -215,10 +216,10 @@ COVID-19-Data-Analysis/
 git clone <your-github-repository-url>
 ```
 
-### 2. Navigate to the Project Directory
+### 2. Navigate to the Project Folder
 
 ```bash
-cd COVID-19-Data-Analysis
+cd Cars-Data-Analysis
 ```
 
 ### 3. Install Required Libraries
@@ -227,7 +228,7 @@ cd COVID-19-Data-Analysis
 pip install pandas numpy matplotlib jupyter
 ```
 
-### 4. Launch Jupyter Notebook
+### 4. Start Jupyter Notebook
 
 ```bash
 jupyter notebook
@@ -238,34 +239,16 @@ jupyter notebook
 Open:
 
 ```text
-Covid19 Project.ipynb
+Cars Data Project.ipynb
 ```
 
 Make sure the dataset:
 
 ```text
-4. Covid_19_data.csv
+2. Cars Data1.csv
 ```
 
-is available in the same directory as the notebook.
-
-## 💡 Skills Demonstrated
-
-This project demonstrates practical experience with:
-
-* Python Programming
-* Pandas
-* NumPy
-* Data Loading
-* Data Cleaning
-* Missing Value Checking
-* Duplicate Detection
-* Data Filtering
-* Data Sorting
-* GroupBy Operations
-* Aggregation
-* Exploratory Data Analysis
-* Region-wise Data Analysis
+is present in the same folder as the notebook.
 
 ## 👩‍💻 Author
 
